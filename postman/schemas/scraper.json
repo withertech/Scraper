@@ -15,7 +15,7 @@
     "paths": {
         "/scrape": {
             "get": {
-                "summary": "Scrapes a rom from screenscraper.fr using name of file and crc",
+                "summary": "Scrapes a rom from screenscraper.fr using name of file and system",
                 "operationId": "scrape",
                 "tags": [
                     "scrape"
