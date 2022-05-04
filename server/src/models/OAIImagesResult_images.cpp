@@ -214,7 +214,7 @@ bool OAIImagesResult_images::isSet() const {
 
 bool OAIImagesResult_images::isValid() const {
     // only required properties are required for the object to be considered valid
-    return true;
+    return m_r_long_isValid && m_tall_isValid && m_hero_isValid && m_logo_isValid && m_icon_isValid && true;
 }
 
 } // namespace OpenAPI

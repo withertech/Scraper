@@ -19,7 +19,6 @@ import { ErrorResult } from '../model/errorResult';
 import { ImagesResult } from '../model/imagesResult';
 
 import { ObjectSerializer, Authentication, VoidAuth, Interceptor } from '../model/models';
-import { HttpBasicAuth, HttpBearerAuth, ApiKeyAuth, OAuth } from '../model/models';
 
 import { HttpError, RequestFile } from './apis';
 
@@ -39,17 +38,13 @@ export class ScrapeApi {
 
     protected authentications = {
         'default': <Authentication>new VoidAuth(),
-        'BasicAuth': new HttpBasicAuth(),
     }
 
     protected interceptors: Interceptor[] = [];
 
     constructor(basePath?: string);
-    constructor(username: string, password: string, basePath?: string);
     constructor(basePathOrUsername: string, password?: string, basePath?: string) {
         if (password) {
-            this.username = basePathOrUsername;
-            this.password = password
             if (basePath) {
                 this.basePath = basePath;
             }
@@ -86,14 +81,6 @@ export class ScrapeApi {
 
     public setApiKey(key: ScrapeApiApiKeys, value: string) {
         (this.authentications as any)[ScrapeApiApiKeys[key]].apiKey = value;
-    }
-
-    set username(username: string) {
-        this.authentications.BasicAuth.username = username;
-    }
-
-    set password(password: string) {
-        this.authentications.BasicAuth.password = password;
     }
 
     public addInterceptor(interceptor: Interceptor) {
@@ -151,9 +138,6 @@ export class ScrapeApi {
         };
 
         let authenticationPromise = Promise.resolve();
-        if (this.authentications.BasicAuth.username && this.authentications.BasicAuth.password) {
-            authenticationPromise = authenticationPromise.then(() => this.authentications.BasicAuth.applyToRequest(localVarRequestOptions));
-        }
         authenticationPromise = authenticationPromise.then(() => this.authentications.default.applyToRequest(localVarRequestOptions));
 
         let interceptorPromise = authenticationPromise;

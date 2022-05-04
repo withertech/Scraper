@@ -13,11 +13,11 @@
 import { RequestFile } from './models';
 
 export class ImagesResultImages {
-    '_long'?: string;
-    'tall'?: string;
-    'hero'?: string;
-    'logo'?: string;
-    'icon'?: string;
+    '_long': string;
+    'tall': string;
+    'hero': string;
+    'logo': string;
+    'icon': string;
 
     static discriminator: string | undefined = undefined;
 

@@ -15,8 +15,8 @@ import { ImagesResultImages } from './imagesResultImages';
 
 export class ImagesResult {
     'name': string;
-    'system'?: string;
-    'images'?: ImagesResultImages;
+    'system': string;
+    'images': ImagesResultImages;
 
     static discriminator: string | undefined = undefined;
 

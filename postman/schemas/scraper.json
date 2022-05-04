@@ -70,7 +70,9 @@
 			"ImagesResult": {
 				"type": "object",
 				"required": [
-					"name"
+					"name",
+					"system",
+					"images"
 				],
 				"properties": {
 					"name": {
@@ -81,6 +83,13 @@
 					},
 					"images": {
 						"type": "object",
+						"required": [
+							"long",
+							"tall",
+							"hero",
+							"logo",
+							"icon"
+						],
 						"properties": {
 							"long": {
 								"type": "string",
@@ -122,17 +131,10 @@
 					}
 				}
 			}
-		},
-		"securitySchemes": {
-			"BasicAuth": {
-				"type": "http",
-				"scheme": "basic"
-			}
 		}
 	},
 	"security": [
 		{
-			"BasicAuth": []
 		}
 	]
 }
