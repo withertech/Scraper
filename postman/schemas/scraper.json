@@ -84,14 +84,14 @@
 					"images": {
 						"type": "object",
 						"required": [
-							"long",
+							"head",
 							"tall",
 							"hero",
 							"logo",
 							"icon"
 						],
 						"properties": {
-							"long": {
+							"head": {
 								"type": "string",
 								"format": "uri"
 							},
