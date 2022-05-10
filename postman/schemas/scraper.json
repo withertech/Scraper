@@ -1,140 +1,155 @@
 {
-	"openapi": "3.0.0",
-	"info": {
-		"version": "1.0.0",
-		"title": "Scraper",
-		"license": {
-			"name": "GPL-3.0"
-		}
-	},
-	"servers": [
-		{
-			"url": "https://repo.withertech.com/scraper/api/"
-		}
-	],
-	"paths": {
-		"/scrape": {
-			"get": {
-				"summary": "Scrapes a rom for steam rom manager from screenscraper.fr using name of file and md5 sum",
-				"operationId": "scrape",
-				"tags": [
-					"scrape"
-				],
-				"parameters": [
-					{
-						"name": "filename",
-						"in": "query",
-						"description": "name of the rom",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					},
-					{
-						"name": "md5",
-						"in": "query",
-						"description": "md5 of the rom",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Urls to the images for the rom",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ImagesResult"
-								}
-							}
-						}
-					},
-					"default": {
-						"description": "unexpected error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ErrorResult"
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	},
-	"components": {
-		"schemas": {
-			"ImagesResult": {
-				"type": "object",
-				"required": [
-					"name",
-					"system",
-					"images"
-				],
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"system": {
-						"type": "string"
-					},
-					"images": {
-						"type": "object",
-						"required": [
-							"head",
-							"tall",
-							"hero",
-							"logo",
-							"icon"
-						],
-						"properties": {
-							"head": {
-								"type": "string",
-								"format": "uri"
-							},
-							"tall": {
-								"type": "string",
-								"format": "uri"
-							},
-							"hero": {
-								"type": "string",
-								"format": "uri"
-							},
-							"logo": {
-								"type": "string",
-								"format": "uri"
-							},
-							"icon": {
-								"type": "string",
-								"format": "uri"
-							}
-						}
-					}
-				}
-			},
-			"ErrorResult": {
-				"type": "object",
-				"required": [
-					"code",
-					"message"
-				],
-				"properties": {
-					"code": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"message": {
-						"type": "string"
-					}
-				}
-			}
-		}
-	},
-	"security": [
-		{
-		}
-	]
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Scraper",
+    "description": "Api for using screenscraper.fr in steam rom manager",
+    "license": {
+      "name": "GPL-3.0"
+    },
+    "contact": {
+      "name": "Witherking25"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://repo.withertech.com/scraper/api",
+      "description": "repo"
+    }
+  ],
+  "tags": [
+    {
+      "name": "scrape",
+      "description": "Scrapes a rom"
+    }
+  ],
+  "paths": {
+    "/scrape": {
+      "get": {
+        "summary": "Scrape a rom",
+        "description": "Scrapes a rom for steam rom manager from screenscraper.fr using name of file and md5 sum",
+        "operationId": "scrape",
+        "tags": [
+          "scrape"
+        ],
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "query",
+            "description": "name of the rom",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "md5",
+            "in": "query",
+            "description": "md5 of the rom",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Urls to the images for the rom",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImagesResult"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ImagesResult": {
+        "type": "object",
+        "required": [
+          "name",
+          "system",
+          "images"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string"
+          },
+          "images": {
+            "type": "object",
+            "required": [
+              "head",
+              "tall",
+              "hero",
+              "logo",
+              "icon"
+            ],
+            "properties": {
+              "head": {
+                "type": "string",
+                "format": "uri"
+              },
+              "tall": {
+                "type": "string",
+                "format": "uri"
+              },
+              "hero": {
+                "type": "string",
+                "format": "uri"
+              },
+              "logo": {
+                "type": "string",
+                "format": "uri"
+              },
+              "icon": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "x-examples": {},
+        "x-internal": false
+      },
+      "ErrorResult": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "x-examples": {}
+      }
+    },
+    "securitySchemes": {}
+  },
+  "security": [
+    {}
+  ]
 }
