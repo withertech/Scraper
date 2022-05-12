@@ -8,7 +8,9 @@
       "name": "GPL-3.0"
     },
     "contact": {
-      "name": "Witherking25"
+      "name": "Witherking25",
+      "email": "witherking@withertech.com",
+      "url": "https://github.com/withertech"
     }
   },
   "servers": [
@@ -21,35 +23,47 @@
     {
       "name": "scrape",
       "description": "Scrapes a rom"
+    },
+    {
+      "name": "auth",
+      "description": "For authentication"
+    },
+    {
+      "name": "page",
+      "description": "For frontend"
     }
   ],
   "paths": {
     "/scrape": {
       "get": {
-        "summary": "Scrape a rom",
-        "description": "Scrapes a rom for steam rom manager from screenscraper.fr using name of file and md5 sum",
-        "operationId": "scrape",
         "tags": [
           "scrape"
         ],
+        "summary": "Scrape a rom",
+        "description": "Scrapes a rom for steam rom manager from screenscraper.fr using name of file and md5 sum",
+        "operationId": "scrape_scrape_get",
         "parameters": [
           {
-            "name": "filename",
-            "in": "query",
             "description": "name of the rom",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": "string"
-            }
+              "title": "Filename",
+              "type": "string",
+              "description": "name of the rom"
+            },
+            "name": "filename",
+            "in": "query"
           },
           {
-            "name": "md5",
-            "in": "query",
             "description": "md5 of the rom",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": "string"
-            }
+              "title": "Md5",
+              "type": "string",
+              "description": "md5 of the rom"
+            },
+            "name": "md5",
+            "in": "query"
           }
         ],
         "responses": {
@@ -63,12 +77,347 @@
               }
             }
           },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
           "default": {
-            "description": "unexpected error",
+            "description": "Unexpected Error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/auth/token": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Token",
+        "description": "Generates an authentication token",
+        "operationId": "auth_token",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_token_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login",
+        "description": "Logs in a user",
+        "operationId": "auth_login",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_login_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Register",
+        "description": "Registers a user",
+        "operationId": "auth_register",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_register_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "page"
+        ],
+        "summary": "User Page",
+        "description": "Frontend user page",
+        "operationId": "user_page",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Token",
+              "type": "string",
+              "default": "none"
+            },
+            "name": "token",
+            "in": "cookie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/keys": {
+      "get": {
+        "tags": [
+          "page"
+        ],
+        "summary": "Keys Page",
+        "description": "Frontend user keys page",
+        "operationId": "keys_page",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Token",
+              "type": "string",
+              "default": "none"
+            },
+            "name": "token",
+            "in": "cookie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/delete": {
+      "get": {
+        "tags": [
+          "page"
+        ],
+        "summary": "Delete Page",
+        "description": "Frontend user delete page",
+        "operationId": "delete_page",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Token",
+              "type": "string",
+              "default": "none"
+            },
+            "name": "token",
+            "in": "cookie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "page"
+        ],
+        "summary": "Main Page",
+        "description": "Frontend main page",
+        "operationId": "main_page__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "get": {
+        "tags": [
+          "page"
+        ],
+        "summary": "Login Page",
+        "description": "Frontend login page",
+        "operationId": "login_page_login_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "get": {
+        "tags": [
+          "page"
+        ],
+        "summary": "Register Page",
+        "description": "Frontend register page",
+        "operationId": "register_page",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -79,77 +428,285 @@
   },
   "components": {
     "schemas": {
-      "ImagesResult": {
+      "auth_token_body": {
+        "title": "Authentication Token Body",
+        "required": [
+          "username",
+          "password"
+        ],
         "type": "object",
+        "properties": {
+          "grant_type": {
+            "title": "Grant Type",
+            "pattern": "password",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string",
+            "default": ""
+          },
+          "client_id": {
+            "title": "Client Id",
+            "type": "string"
+          },
+          "client_secret": {
+            "title": "Client Secret",
+            "type": "string"
+          }
+        }
+      },
+      "auth_login_body": {
+        "title": "Authentication Login Body",
+        "required": [
+          "username",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "title": "Grant Type",
+            "pattern": "password",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string",
+            "default": ""
+          },
+          "client_id": {
+            "title": "Client Id",
+            "type": "string"
+          },
+          "client_secret": {
+            "title": "Client Secret",
+            "type": "string"
+          }
+        }
+      },
+      "auth_register_body": {
+        "title": "Authentication Register Body",
+        "required": [
+          "username",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "title": "Grant Type",
+            "pattern": "password",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string",
+            "default": ""
+          },
+          "client_id": {
+            "title": "Client Id",
+            "type": "string"
+          },
+          "client_secret": {
+            "title": "Client Secret",
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResult": {
+        "title": "ErrorResult",
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "integer"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "description": "Unexpected Error"
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        },
+        "description": "HTTP Validation Error"
+      },
+      "ImagesResult": {
+        "title": "ImagesResult",
         "required": [
           "name",
           "system",
           "images"
         ],
+        "type": "object",
         "properties": {
           "name": {
+            "title": "Name",
             "type": "string"
           },
           "system": {
+            "title": "System",
             "type": "string"
           },
           "images": {
-            "type": "object",
-            "required": [
-              "head",
-              "tall",
-              "hero",
-              "logo",
-              "icon"
-            ],
-            "properties": {
-              "head": {
-                "type": "string",
-                "format": "uri"
-              },
-              "tall": {
-                "type": "string",
-                "format": "uri"
-              },
-              "hero": {
-                "type": "string",
-                "format": "uri"
-              },
-              "logo": {
-                "type": "string",
-                "format": "uri"
-              },
-              "icon": {
-                "type": "string",
-                "format": "uri"
-              }
-            }
+            "$ref": "#/components/schemas/ImagesResultImages"
           }
         },
-        "x-examples": {},
-        "x-internal": false
+        "description": "Holds the name, system, and images objects"
       },
-      "ErrorResult": {
-        "type": "object",
+      "ImagesResultImages": {
+        "title": "ImagesResultImages",
         "required": [
-          "code",
-          "message"
+          "head",
+          "tall",
+          "hero",
+          "logo",
+          "icon"
         ],
+        "type": "object",
         "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32"
+          "head": {
+            "title": "Head",
+            "maxLength": 65536,
+            "minLength": 1,
+            "type": "string",
+            "format": "uri"
           },
-          "message": {
+          "tall": {
+            "title": "Tall",
+            "maxLength": 65536,
+            "minLength": 1,
+            "type": "string",
+            "format": "uri"
+          },
+          "hero": {
+            "title": "Hero",
+            "maxLength": 65536,
+            "minLength": 1,
+            "type": "string",
+            "format": "uri"
+          },
+          "logo": {
+            "title": "Logo",
+            "maxLength": 65536,
+            "minLength": 1,
+            "type": "string",
+            "format": "uri"
+          },
+          "icon": {
+            "title": "Icon",
+            "maxLength": 65536,
+            "minLength": 1,
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "description": "Holds the actual urls to the images"
+      },
+      "User": {
+        "title": "User",
+        "required": [
+          "username",
+          "key",
+          "password_hash"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "maxLength": 50,
+            "type": "string"
+          },
+          "key": {
+            "title": "Key",
+            "maxLength": 128,
+            "type": "string"
+          },
+          "password_hash": {
+            "title": "Password Hash",
+            "maxLength": 128,
             "type": "string"
           }
         },
-        "x-examples": {}
+        "description": "Holds information about a user",
+        "additionalProperties": false
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "description": "General Validation Error"
       }
     },
-    "securitySchemes": {}
-  },
-  "security": [
-    {}
-  ]
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "/scraper/api/auth/token"
+          }
+        }
+      }
+    }
+  }
 }
